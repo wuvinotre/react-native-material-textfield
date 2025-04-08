@@ -1,50 +1,13 @@
-import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
-import { Animated } from 'react-native';
+import React, { PureComponent } from "react";
+import { Animated } from "react-native";
 
-import styles from './styles';
+import styles from "./styles";
 
 export default class Label extends PureComponent {
   static defaultProps = {
     numberOfLines: 1,
     disabled: false,
     restricted: false,
-  };
-
-  static propTypes = {
-    numberOfLines: PropTypes.number,
-
-    disabled: PropTypes.bool,
-    restricted: PropTypes.bool,
-
-    fontSize: PropTypes.number.isRequired,
-    activeFontSize: PropTypes.number.isRequired,
-
-    baseColor: PropTypes.string.isRequired,
-    tintColor: PropTypes.string.isRequired,
-    errorColor: PropTypes.string.isRequired,
-
-    focusAnimation: PropTypes
-      .instanceOf(Animated.Value)
-      .isRequired,
-
-    labelAnimation: PropTypes
-      .instanceOf(Animated.Value)
-      .isRequired,
-
-    contentInset: PropTypes.shape({
-      label: PropTypes.number,
-    }),
-
-    offset: PropTypes.shape({
-      x0: PropTypes.number,
-      y0: PropTypes.number,
-      x1: PropTypes.number,
-      y1: PropTypes.number,
-    }),
-
-    style: Animated.Text.propTypes.style,
-    label: PropTypes.string,
   };
 
   render() {
@@ -69,14 +32,14 @@ export default class Label extends PureComponent {
       return null;
     }
 
-    let color = disabled?
-      baseColor:
-      restricted?
-        errorColor:
-        focusAnimation.interpolate({
-          inputRange: [-1, 0, 1],
-          outputRange: [errorColor, baseColor, tintColor],
-        });
+    let color = disabled
+      ? baseColor
+      : restricted
+        ? errorColor
+        : focusAnimation.interpolate({
+            inputRange: [-1, 0, 1],
+            outputRange: [errorColor, baseColor, tintColor],
+          });
 
     let textStyle = {
       lineHeight: fontSize,
@@ -91,22 +54,26 @@ export default class Label extends PureComponent {
     y0 += fontSize * 0.25;
 
     let containerStyle = {
-      transform: [{
-        scale: labelAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [1, activeFontSize / fontSize],
-        }),
-      }, {
-        translateY: labelAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [y0, y1],
-        }),
-      }, {
-        translateX: labelAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [x0, x1],
-        }),
-      }],
+      transform: [
+        {
+          scale: labelAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, activeFontSize / fontSize],
+          }),
+        },
+        {
+          translateY: labelAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [y0, y1],
+          }),
+        },
+        {
+          translateX: labelAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [x0, x1],
+          }),
+        },
+      ],
     };
 
     return (
